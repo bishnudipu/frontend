@@ -1,0 +1,6 @@
+.rfpProducts{
+    padding: 40px;
+}
+.rfpProducts .MuiCard-root{
+    display: flex;
+}

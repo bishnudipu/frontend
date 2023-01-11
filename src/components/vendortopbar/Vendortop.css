@@ -1,0 +1,12 @@
+.PrivateTabIndicator-colorSecondary-3 {
+    background-color: #ffb600 !important;
+}
+/* .PrivateTabIndicator-root-1{
+    left: 30px !important;
+    width: 100px !important;
+     right: 0px; 
+} */
+
+.Mui-selected{
+    color: #ffb600 !important;
+}

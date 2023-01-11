@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="37" height="36" viewBox="0 0 37 36">
+  <defs>
+    <clipPath id="clip-Profile">
+      <rect width="37" height="36"/>
+    </clipPath>
+  </defs>
+  <g id="Profile" clip-path="url(#clip-Profile)">
+    <g id="user-avatar-filled-alt" transform="translate(-1.25 -1.25)">
+      <path id="Path_4" data-name="Path 4" d="M19.25,2.25a17,17,0,1,0,17,17A17,17,0,0,0,19.25,2.25Zm9.714,27.83v-.738a6.325,6.325,0,0,0-6.071-6.449H15.607a6.314,6.314,0,0,0-6.06,6.448c0,.013-.012.027-.012.04v.71a14.578,14.578,0,1,1,19.429-.012Z" transform="translate(0 0)" fill="#fff"/>
+      <path id="Path_5" data-name="Path 5" d="M18.446,7.875a6.071,6.071,0,1,0,6.071,6.071,6.071,6.071,0,0,0-6.071-6.071Z" transform="translate(0.804 0.446)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

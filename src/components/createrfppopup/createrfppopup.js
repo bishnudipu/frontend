@@ -26,6 +26,10 @@ import { useDispatch } from "react-redux";
 import { setAddCreatRfpPopUp } from "../../redux/feature/popup.feature";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import axios from "axios";
+import { yupResolver } from "@hookform/resolvers";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -77,16 +81,26 @@ const subCategories = [
 
 function CreateRfpPopUp() {
   const [vendorList, setVendorList] = React.useState([]);
-  const [value, setValue] = React.useState(new Date());
+  const [releaseDate, setReleaseDate] = React.useState(new Date());
   const [category, setCategory] = React.useState([]);
   const [subCategory, setSubCategory] = React.useState([]);
   const [rfpState, setRefpState] = React.useState("");
   const [qunatity, setQuantity] = useState("");
+  const [rfpCost, setRfpCost] = useState(0);
+  const [closureDate, setClosureDate] = React.useState(new Date());
+  const [file, setFile] = React.useState();
+  const [details, setDetails] = React.useState("");
+
+  const [bidDate, setBidDate] = React.useState(new Date());
 
   console.log(vendorList, "vendorList");
   console.log(category, "category");
   console.log(subCategory, "subCategory");
   console.log(qunatity, "quantity");
+
+  console.log(closureDate, "closureDate");
+  console.log(releaseDate, "releaseDate");
+  console.log(bidDate, "bidDate");
 
   let dispatch = useDispatch();
   const handleChange = (event) => {
@@ -122,11 +136,75 @@ function CreateRfpPopUp() {
     // setIsAddRfp(true)
     dispatch(setAddCreatRfpPopUp());
   };
-  const handleDateChange = (newValue) => {
-    setValue(newValue);
+  const handleReleaseDate = (newValue) => {
+    setReleaseDate(newValue);
   };
 
-  console.log(rfpState, "bishnu");
+  const handleClosureDate = (newValue) => {
+    setClosureDate(newValue);
+  };
+
+  const handleBidDate = (newValue) => {
+    setBidDate(newValue);
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
+  console.log(file, "file");
+
+  console.log(rfpCost, "bishnu");
+  console.log(vendorList, "vendorlist");
+
+  // const validationSchema = yup.object().shape({
+  //   vendorlist: yup.array().required("Required"),
+  //   rfpno: yup.string().required("Required"),
+  //   categories: yup.array().required("Required"),
+  // });
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    debugger;
+    const formData = new FormData();
+    formData.append("bishnu", "shshs");
+    formData.append("bishnu", "shshssssssss");
+
+    formData.append("vendor", [vendorList]);
+    formData.append("rfpno", rfpState);
+    formData.append("category", [category]);
+    formData.append("subcategory", [subCategories]);
+    formData.append("quantity", qunatity); //$d
+    formData.append("releaseDate", releaseDate.$d);
+    formData.append("closureDate", closureDate.$d);
+    formData.append("bidDate", bidDate.$d);
+    formData.append("rfpcost", rfpCost); //name
+    formData.append("file", file.name);
+
+    formData.append("details", details);
+
+    axios({
+      method: "post",
+      url: "https://jsonplaceholder.typicode.com/posts",
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then(function (response) {
+        //handle success
+        console.log(response);
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response);
+      });
+
+    for (const value of formData.values()) {
+      console.log(value, "formdata");
+    }
+  };
+
   return (
     <>
       <div className="popUpmodal">
@@ -146,7 +224,7 @@ function CreateRfpPopUp() {
           />
           <CardContent>
             <div className="modal-body">
-              <form>
+              <form onSubmit={submitHandler}>
                 <Grid container spacing={2}>
                   <Grid item md={4}>
                     <FormControl sx={{ width: 220 }}>
@@ -168,6 +246,7 @@ function CreateRfpPopUp() {
                         onChange={handleChange}
                         input={<OutlinedInput label="Tag" />}
                         renderValue={(selected) => selected.join(", ")}
+                        name="vendorlist"
                         // MenuProps={MenuProps}
                         required
                       >
@@ -196,6 +275,7 @@ function CreateRfpPopUp() {
                         id="outlined-basic"
                         variant="outlined"
                         required
+                        name="rfpState"
                         onChange={(e) => setRefpState(e.target.value)}
                       />
                     </FormControl>
@@ -220,6 +300,7 @@ function CreateRfpPopUp() {
                         onChange={handleCategoryChange}
                         input={<OutlinedInput label="Tag" />}
                         renderValue={(selected) => selected.join(", ")}
+                        name="category"
                         // MenuProps={MenuProps}
                       >
                         {categories.map((name) => (
@@ -251,6 +332,7 @@ function CreateRfpPopUp() {
                         onChange={handleSubCategoryChange}
                         input={<OutlinedInput label="Tag" />}
                         renderValue={(selected) => selected.join(", ")}
+                        name="subCategory"
                         // MenuProps={MenuProps}
                       >
                         {subCategories.map((name) => (
@@ -279,7 +361,9 @@ function CreateRfpPopUp() {
                       <TextField
                         id="outlined-basic"
                         variant="outlined"
+                        value={qunatity}
                         onChange={(e) => setQuantity(e.target.value)}
+                        name="qunatity"
                       />
                     </FormControl>
                   </Grid>
@@ -312,13 +396,16 @@ function CreateRfpPopUp() {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DesktopDatePicker
                             inputFormat="MM/DD/YYYY"
-                            value={value}
-                            onChange={handleDateChange}
+                            value={releaseDate}
+                            onChange={handleReleaseDate}
+                            name="releaseDate"
                             renderInput={(params) => (
                               <TextField
                                 style={{
                                   width: "85%",
                                 }}
+                                value={releaseDate}
+                                name="releaseDate"
                                 {...params}
                               />
                             )}
@@ -358,13 +445,16 @@ function CreateRfpPopUp() {
                           <DesktopDatePicker
                             // label="Date desktop"
                             inputFormat="MM/DD/YYYY"
-                            value={value}
-                            onChange={handleDateChange}
+                            value={closureDate}
+                            onChange={handleClosureDate}
+                            name="closuredate"
                             renderInput={(params) => (
                               <TextField
                                 style={{
                                   width: "85%",
                                 }}
+                                value={closureDate}
+                                name="closuredate"
                                 {...params}
                               />
                             )}
@@ -403,14 +493,17 @@ function CreateRfpPopUp() {
                           <DesktopDatePicker
                             // label="Date desktop"
                             inputFormat="MM/DD/YYYY"
-                            value={value}
-                            onChange={handleDateChange}
+                            value={bidDate}
+                            onChange={handleBidDate}
+                            name="biddate"
                             renderInput={(params) => (
                               <TextField
                                 disabled
                                 style={{
                                   width: "85%",
                                 }}
+                                name="bidDate"
+                                value={bidDate}
                                 {...params}
                               />
                             )}
@@ -435,6 +528,9 @@ function CreateRfpPopUp() {
                         type="number"
                         id="outlined-basic"
                         variant="outlined"
+                        value={rfpCost}
+                        name="rfpCost"
+                        onChange={(e) => setRfpCost(e.target.value)}
                       />
                     </FormControl>
                   </Grid>
@@ -454,6 +550,10 @@ function CreateRfpPopUp() {
                         type="file"
                         id="outlined-basic"
                         variant="outlined"
+                        // value={file}
+                        onChange={handleFileChange}
+                        name="file"
+                        // value={file}
                       />
                     </FormControl>
                   </Grid>
@@ -469,7 +569,14 @@ function CreateRfpPopUp() {
                       >
                         Details
                       </InputLabel>
-                      <TextField variant="outlined" fullWidth multiline />
+                      <TextField
+                        variant="outlined"
+                        fullWidth
+                        multiline
+                        value={details}
+                        name="details"
+                        onChange={(e) => setDetails(e.target.value)}
+                      />
                     </FormControl>
                   </Grid>
                   <Grid item md={12}>
@@ -493,6 +600,7 @@ function CreateRfpPopUp() {
                           color: "white",
                           //
                         }}
+                        type="submit"
                       >
                         Submit
                       </Button>

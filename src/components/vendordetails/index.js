@@ -10,7 +10,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import React from "react";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import {
   Box,
@@ -28,7 +28,7 @@ import { useDispatch } from "react-redux";
 import { setAddCreatRfpPopUp } from "../../redux/feature/popup.feature";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
 import { useAtom } from "jotai";
 import { vendorlistPopup } from "../../jotaistore";
 import Querylist from "../Querylist";
@@ -108,7 +108,8 @@ const data = [
       //   re1:,
       // },
       {
-        "Need to understand more details on the Laptop configuration. Please call at 9900178921":""
+        "Need to understand more details on the Laptop configuration. Please call at 9900178921":
+          "",
       },
       // {
       //   re1: ,
@@ -152,14 +153,11 @@ const Vendordetails = ({ vendorId }) => {
   const [openVendorPopup, setOpenVendorPopup] = useAtom(vendorlistPopup);
   const [openSpace, setOpenSpace] = useState(false);
   const [queryList, setQueryList] = useState("");
-  const [userId,setUserId] = useState("")
-
+  const [userId, setUserId] = useState("");
 
   console.log(vendorList, "vendorList");
   console.log(category, "category");
   console.log(subCategory, "subCategory");
-
-  
 
   let dispatch = useDispatch();
   const handleChange = (event) => {
@@ -206,32 +204,30 @@ const Vendordetails = ({ vendorId }) => {
   console.log(queryList, "querylist");
 
   const [expandedRows, setExpandedRows] = useState(null);
-  const [isExpanded,setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleExpandRow = (userId) => {
-
-    setUserId(userId)
+    setUserId(userId);
     let currentExpandedRows = null;
-    console.log(userId,'userId')
+    console.log(userId, "userId");
 
     const isRowExpanded = currentExpandedRows === userId ? userId : null;
-    console.log(isRowExpanded,'isexpanded')
-    console.log(currentExpandedRows,'currentExpandedRows')
+    console.log(isRowExpanded, "isexpanded");
+    console.log(currentExpandedRows, "currentExpandedRows");
     const newExpandedRows = isRowExpanded
       ? null
       : (currentExpandedRows = userId);
     if (expandedRows !== userId) {
       setExpandedRows(newExpandedRows);
-      setIsExpanded(true)
+      setIsExpanded(true);
     } else {
       setExpandedRows(null);
-      setIsExpanded(false)
+      setIsExpanded(false);
     }
-  
   };
 
-  console.log(userId,'userId')
-  console.log('','bishnu')
+  console.log(userId, "userId");
+  console.log("", "bishnu");
   return (
     <>
       <div className="popUpmodal">
@@ -298,7 +294,7 @@ const Vendordetails = ({ vendorId }) => {
                         </thead>
 
                         {data.map((item, index) => {
-                          console.log(index,'indexnumber')
+                          console.log(index, "indexnumber");
                           const {
                             vendorName,
                             responseStatus,
@@ -308,7 +304,7 @@ const Vendordetails = ({ vendorId }) => {
                             bidRate,
                             senderMessage,
                           } = item;
-                          console.log(vendorName,'vendorName')
+                          console.log(vendorName, "vendorName");
                           return (
                             <tbody>
                               <tr
@@ -321,12 +317,18 @@ const Vendordetails = ({ vendorId }) => {
                                 <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                   {responseStatus}
                                 </td>
-                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap flex">
+                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap flex items-center justify-center">
                                   <div className="text-blue-500 cursor-pointer">
                                     {" "}
                                     {query}
                                   </div>
-                                 { query > 0 && isExpanded && userId === index ? <ExpandLessIcon  className="cursor-pointer"/> : <ExpandMoreIcon  className="cursor-pointer"   />}
+                                  {query > 0 &&
+                                  isExpanded &&
+                                  userId === index ? (
+                                    <ExpandLessIcon className="cursor-pointer" />
+                                  ) : (
+                                    <ExpandMoreIcon className="cursor-pointer" />
+                                  )}
                                 </td>
                                 <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                   {closureDate}
@@ -340,23 +342,24 @@ const Vendordetails = ({ vendorId }) => {
                               </tr>
                               {expandedRows === index ? (
                                 <tr>
-                                  
                                   <td
                                     colSpan="6"
                                     className="collaps-viewer mx-auto  "
                                   >
-                                     
                                     {query > 0 && (
                                       <>
-                                        {senderMessage.map((item,index) => {
-                                        console.log(Object.values(item).join(),'objectvalues')
-                                       const marginTopKeep = Object.values(item).join()
+                                        {senderMessage.map((item, index) => {
+                                          console.log(
+                                            Object.values(item).join(),
+                                            "objectvalues"
+                                          );
+                                          const marginTopKeep =
+                                            Object.values(item).join();
                                           return (
-                                            <> 
-                                          
+                                            <>
                                               <div className="h-4 bg-slate-100 text-left font-sans  text-[10px] ">
                                                 {" "}
-                                               {index + 1} Query{" "}
+                                                {index + 1} Query{" "}
                                               </div>
                                               <div className=" w-full flex text-left  h-[50px] text-[14px]">
                                                 {/* {senderMessage.map(
@@ -365,14 +368,20 @@ const Vendordetails = ({ vendorId }) => {
                                                 {Object.keys(item)}
                                               </div>
                                               <div className="h-4 bg-slate-100 text-left font-sans  text-[10px]">
-                                              {index + 1} answer
+                                                {index + 1} answer
                                               </div>
 
-                                              <div className={`w-full flex text-left  h-[50px] text-[14px] ${ marginTopKeep === '' && 'hidden' } `}>
+                                              <div
+                                                className={`w-full flex text-left  h-[50px] text-[14px] ${
+                                                  marginTopKeep === "" &&
+                                                  "hidden"
+                                                } `}
+                                              >
                                                 {/* {senderMessage.map(
                                             (item) => item.re1
                                           )} */}
-                                                {Object.values(item).length > 0 && Object.values(item)}
+                                                {Object.values(item).length >
+                                                  0 && Object.values(item)}
                                               </div>
 
                                               {/* <div className="h-4 bg-slate-100 text-left font-sans  text-[10px] ">

@@ -28,7 +28,7 @@ function VendorProducts() {
           }}
         >
           <div className="w-full mx-auto md:flex justify-evenly items-center gap-7">
-            <div className="max-w-sm p-6 bg-slate-50  border-gray-200 rounded-lg shadow-md border-b-[30px] border-orange-600 relative w-96 h-56 flex justify-around items-center  ">
+            <div className="max-w-sm p-6 bg-slate-50   rounded-lg shadow-md border-b-[30px] border-orange-600 relative md:w-96 md:h-56 flex justify-around items-center  ">
               <img src={totalorder} height="150px" width="150px" alt="" />
               <div className="text-[50px]"> 14</div>
 
@@ -41,7 +41,7 @@ function VendorProducts() {
                 <div className="mr-[9px]">Total Orders</div>
               </div> */}
 
-            <div className="max-w-sm p-6 bg-slate-50  border-gray-200 rounded-lg shadow-md border-b-[30px] border-orange-600 relative w-96 h-56 flex justify-around items-center  ">
+            <div className="max-w-sm p-6 bg-slate-50   rounded-lg shadow-md border-b-[30px] border-orange-600 relative md:w-96 md:h-56 flex justify-around items-center  ">
               <img src={neworder} height="150px" width="150px" alt="" />
               <div className="text-[50px]"> 14</div>
 
@@ -50,7 +50,7 @@ function VendorProducts() {
               </div>
             </div>
 
-            <div className="max-w-sm p-6 bg-slate-50  border-gray-200 rounded-lg shadow-md border-b-[30px] border-orange-600 relative w-96 h-56 flex justify-around items-center  ">
+            <div className="max-w-sm p-6 bg-slate-50   rounded-lg shadow-md border-b-[30px] border-orange-600 relative md:w-96 md:h-56 flex justify-around items-center  ">
               <img src={pendingvendor} height="150px" width="150px" alt="" />
               <div className="text-[50px]"> 14</div>
 
@@ -58,7 +58,7 @@ function VendorProducts() {
                 Pending
               </div>
             </div>
-            <div className="max-w-sm p-6 bg-slate-50  border-gray-200 rounded-lg shadow-md border-b-[30px] border-orange-600 relative w-96 h-56 flex justify-around items-center  ">
+            <div className="max-w-sm p-6 bg-slate-50   rounded-lg shadow-md border-b-[30px] border-orange-600 relative md:w-96 md:h-56 flex justify-around items-center  ">
               <img src={delivered} height="150px" width="150px" alt="" />
               <div className="text-[50px]"> 14</div>
 

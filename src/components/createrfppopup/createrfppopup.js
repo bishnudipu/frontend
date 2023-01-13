@@ -166,43 +166,37 @@ function CreateRfpPopUp() {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    console.log("bishnu");
 
-    debugger;
     const formData = new FormData();
-    formData.append("bishnu", "shshs");
-    formData.append("bishnu", "shshssssssss");
 
-    formData.append("vendor", [vendorList]);
-    formData.append("rfpno", rfpState);
-    formData.append("category", [category]);
-    formData.append("subcategory", [subCategories]);
-    formData.append("quantity", qunatity); //$d
-    formData.append("releaseDate", releaseDate.$d);
-    formData.append("closureDate", closureDate.$d);
-    formData.append("bidDate", bidDate.$d);
+    formData.append("vendor", vendorList);
+    formData.append("rfpnumber", rfpState);
+    formData.append("category", category);
+    formData.append("subcategory", subCategories);
+    formData.append("Quantity", qunatity); //$d
+    formData.append("ReleaseDate", releaseDate.$d);
+    formData.append("ClosureDate", closureDate.$d);
+    formData.append("BidDate", bidDate.$d);
     formData.append("rfpcost", rfpCost); //name
-    formData.append("file", file.name);
+    formData.append("uploadtheDocument", file.name);
 
-    formData.append("details", details);
+    formData.append("Details", details);
 
     axios({
       method: "post",
-      url: "https://jsonplaceholder.typicode.com/posts",
+      url: "http://localhost:5000/createRFP",
       data: formData,
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then(function (response) {
         //handle success
-        console.log(response);
+        console.log(response, "axiosresponse");
       })
       .catch(function (response) {
         //handle error
-        console.log(response);
+        console.log(response, "axioserror");
       });
-
-    for (const value of formData.values()) {
-      console.log(value, "formdata");
-    }
   };
 
   return (
@@ -553,6 +547,7 @@ function CreateRfpPopUp() {
                         // value={file}
                         onChange={handleFileChange}
                         name="file"
+                        accept="csv/*"
                         // value={file}
                       />
                     </FormControl>
@@ -574,9 +569,13 @@ function CreateRfpPopUp() {
                         fullWidth
                         multiline
                         value={details}
+                        inputProps={{ maxLength: 250 }}
                         name="details"
                         onChange={(e) => setDetails(e.target.value)}
                       />
+                      <div className="text-[10px] text-right ">
+                        Max Characters Length :- 250
+                      </div>
                     </FormControl>
                   </Grid>
                   <Grid item md={12}>

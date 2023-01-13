@@ -537,7 +537,7 @@ export default function EnhancedTable() {
           Bid List
         </Typography>
 
-        <div className="relative ml-6 w-[30%]">
+        <div className="relative ml-6 w-[20%]">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg
               aria-hidden="true"

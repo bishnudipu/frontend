@@ -33,26 +33,26 @@ import Vendordetails from "../../vendordetails";
 import VendorPopup from "../../createvendorpopup";
 
 function createData(
-  id,
-  category,
-  subcat,
-  quantity,
-  status,
-  releasedate,
-  closerdate,
-  description,
-  vendors
+  Id,
+  Category,
+  SubCategory,
+  Quantity,
+  Status,
+  Releasedate,
+  Closuredate,
+  Description,
+  Vendors
 ) {
   return {
-    id,
-    category,
-    subcat,
-    quantity,
-    status,
-    releasedate,
-    closerdate,
-    description,
-    vendors,
+    Id,
+    Category,
+    SubCategory,
+    Quantity,
+    Status,
+    Releasedate,
+    Closuredate,
+    Description,
+    Vendors,
   };
 }
 
@@ -379,7 +379,7 @@ function EnhancedTableHead(props) {
           }}
           align="center"
         >
-          Closer Date
+          Closure Date
         </TableCell>
         <TableCell
           align="center"
@@ -431,6 +431,8 @@ export default function EnhancedTable() {
   });
 
   let { createPopup } = isPopUp;
+
+  console.log(createPopup, "createPopup");
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -625,21 +627,21 @@ export default function EnhancedTable() {
                         padding="none"
                         align="center"
                       >
-                        {row.id}
+                        {row.Id}
                       </TableCell>
-                      <TableCell align="center">{row.category}</TableCell>
-                      <TableCell align="center">{row.subcat}</TableCell>
+                      <TableCell align="center">{row.Category}</TableCell>
+                      <TableCell align="center">{row.SubCategory}</TableCell>
                       <TableCell align="center">
                         {" "}
-                        <div> {row.quantity} </div>{" "}
+                        <div> {row.Quantity} </div>{" "}
                       </TableCell>
                       <TableCell align="center">
                         {" "}
-                        <div className="mr-[15px]"> {row.status} </div>
+                        <div className="mr-[15px]"> {row.Status} </div>
                       </TableCell>
-                      <TableCell align="center">{row.releasedate}</TableCell>
-                      <TableCell align="center">{row.closerdate}</TableCell>
-                      <TableCell align="center">{row.description}</TableCell>
+                      <TableCell align="center">{row.Releasedate}</TableCell>
+                      <TableCell align="center">{row.Closuredate}</TableCell>
+                      <TableCell align="center">{row.Description}</TableCell>
                       <TableCell
                         align="center"
                         sx={{ cursor: "pointer" }}
@@ -649,7 +651,7 @@ export default function EnhancedTable() {
                         }}
                       >
                         {" "}
-                        <div className="text-blue-500 "> {row.vendors}</div>
+                        <div className="text-blue-500 "> {row.Vendors}</div>
                       </TableCell>
                     </TableRow>
                   );

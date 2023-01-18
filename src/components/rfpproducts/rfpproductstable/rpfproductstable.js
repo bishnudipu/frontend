@@ -10,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
+import CloseIcon from "@mui/icons-material/Close";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
@@ -21,16 +22,24 @@ import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
-import { Button } from "@material-ui/core";
+import { Button, Modal } from "@material-ui/core";
 import CreateRfpPopUp from "../../createrfppopup/createrfppopup";
 import { useDispatch, useSelector } from "react-redux";
 import { setAddCreatRfpPopUp } from "../../../redux/feature/popup.feature";
 import { useReactToPrint } from "react-to-print";
 import { CSVLink } from "react-csv";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Stack from "@mui/material/Stack";
 import { useAtom } from "jotai";
-import { vendorlistPopup } from "../../../jotaistore";
+import { createVendorSuccess, vendorlistPopup } from "../../../jotaistore";
 import Vendordetails from "../../vendordetails";
 import VendorPopup from "../../createvendorpopup";
+import { createVendorPopup } from "../../../jotaistore";
+import Success from "../../success";
+import axios from "axios";
+
+// import { Stack } from "@mui/system";
 
 function createData(
   Id,
@@ -424,6 +433,8 @@ export default function EnhancedTable() {
   const [openVendorPopup, setVendorPopup] = useAtom(vendorlistPopup);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [vendorId, setVendorId] = React.useState("");
+  const [createVPopup, setCreateVPopup] = useAtom(createVendorPopup);
+  const [successSetup, setSuccessSetup] = useAtom(createVendorSuccess);
   // const [isAddRfp,setIsAddRfp] = React.useState(false)
   let dispatch = useDispatch();
   const isPopUp = useSelector((state) => {
@@ -432,7 +443,6 @@ export default function EnhancedTable() {
 
   let { createPopup } = isPopUp;
 
-  console.log(createPopup, "createPopup");
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -449,14 +459,53 @@ export default function EnhancedTable() {
     setSelected([]);
   };
 
+
+  // const style = {
+  //   position: "absolute",
+  //   top: "50%",
+  //   left: "50%",
+  //   transform: "translate(-50%, -50%)",
+  //   width: 400,
+  //   bgcolor: "background.paper",
+  //   border: "2px solid #000",
+  //   boxShadow: 24,
+  //   p: 4,
+  // };
+
+  const [data, setData] = React.useState([]);
+  // const [getCategory, setGetCategory] = useState([]);
+  // const [getSubCategory, setGetSubCategory] = useState([]);
+
+  const categoryData = async () => {
+    const response = await fetch("http://localhost:5000/getCategory");
+    const data = await response.json();
+    setData(data);
+
+  };
+
+  React.useEffect(() => {
+    categoryData();
+  }, []);
+
+
+
+  const getData = async () => {
+    const response = await axios.get("http://localhost:5000/getVender");
+ 
+  };
+
+  React.useEffect(() => {
+    getData();
+  }, []);
+
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
 
-    console.log(selectedIndex, "selectedIndex");
+  
 
     let newSelected = [];
 
-    console.log(selected, "newSelected");
+
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -489,11 +538,6 @@ export default function EnhancedTable() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const addRfp = () => {
-    // setIsAddRfp(true)
-    dispatch(setAddCreatRfpPopUp());
-  };
-
   const componentRef = React.useRef();
   const handleToPrint = useReactToPrint({
     content: () => componentRef.current,
@@ -501,9 +545,7 @@ export default function EnhancedTable() {
     onAfterPrint: () => alert("print success"),
   });
 
-  console.log(vendorId, "vendorId");
 
-  console.log(openVendorPopup, "openVendorPopup");
   return (
     <Box sx={{ width: "95%", marginX: "auto" }} component="div">
       <Box sx={{ display: "flex", width: "100%" }} component="div">
@@ -574,7 +616,9 @@ export default function EnhancedTable() {
               color: "white",
               //
             }}
-            onClick={addRfp}
+            onClick={() => {
+              setCreateVPopup(true);
+            }}
           >
             Create RFP
           </Button>
@@ -605,8 +649,7 @@ export default function EnhancedTable() {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  console.log(isItemSelected, "isItemSelected");
-                  console.log(row.vendors, "vendors");
+               
 
                   return (
                     <TableRow
@@ -679,7 +722,62 @@ export default function EnhancedTable() {
         />
       </Paper>
 
-      {createPopup && <CreateRfpPopUp />}
+      {createVPopup && <CreateRfpPopUp data={data} setData={setData} />}
+      {successSetup && (
+        // <Modal
+        //   keepMounted
+        //   aria-labelledby="keep-mounted-modal-title"
+        //   aria-describedby="keep-mounted-modal-description"
+        // >
+        //   <Box sx={style}>
+        //     <Typography
+        //       id="keep-mounted-modal-title"
+        //       variant="h6"
+        //       component="h2"
+        //     >
+        //       Text in a modal
+        //     </Typography>
+        //     <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+        //       Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+        //     </Typography>
+        //   </Box>
+        // </Modal>
+
+        <div
+          className="modaloverlay"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Stack
+            sx={{
+              width: "30%",
+            }}
+            spacing={2}
+          >
+            <div className="p-[120px]  ">
+              <Alert
+                severity="success"
+                sx={{ display: "flex" }}
+                className="relative"
+              >
+                <div
+                  className="absolute right-[-10px] top-[-13px] bg-[#ffffff] rounded-[50%] text-orange-600 cursor-pointer "
+                  onClick={() => setSuccessSetup(false)}
+                >
+                  <CloseIcon />
+                </div>
+                <div>
+                  RFP is successfully created and have sent to 6 vendors
+                </div>
+              </Alert>
+            </div>
+          </Stack>
+        </div>
+        // <CreateRfpPopUp />
+      )}
 
       {openVendorPopup && <Vendordetails vendorId={vendorId} />}
     </Box>

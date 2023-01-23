@@ -26,13 +26,14 @@ import CreateRfpPopUp from "../../createrfppopup/createrfppopup";
 import { useDispatch, useSelector } from "react-redux";
 import VendorPopup from "../../createvendorpopup";
 import { setAddCreatRfpPopUp } from "../../../redux/feature/popup.feature";
-import { openPopup } from "../../../jotaistore";
+import { openPopup, vendorData } from "../../../jotaistore";
 import { useAtom } from "jotai";
 import { productData } from "../../../jotaistore";
 import Notperticipate from "../../notprticipate/notperticipate";
 import { useReactToPrint } from "react-to-print";
 import { useRef } from "react";
 import { CSVLink } from "react-csv";
+import axios from "axios";
 
 function createData(
   id,
@@ -381,7 +382,7 @@ function EnhancedTableHead(props) {
           }}
           align="center"
         >
-          Closer Date
+          Closure Date
         </TableCell>
         <TableCell
           align="center"
@@ -428,6 +429,8 @@ export default function EnhancedTable() {
   const [orderData, setOrderData] = React.useState(productData);
   const [selectedValue, setSelectedValue] = React.useState("");
   const [ppopup, setPpopup] = React.useState(false);
+  const [vendors, setVendors] = useAtom(vendorData);
+  const [vendorunique, setVendorUnique] = React.useState("");
   // const [isAddRfp,setIsAddRfp] = React.useState(false)
   let dispatch = useDispatch();
   const isPopUp = useSelector((state) => {
@@ -518,6 +521,19 @@ export default function EnhancedTable() {
   }, [selectedValue, ppopup]);
 
   console.log(ppopup, "popup");
+
+  const getVendorData = async () => {
+    const response = await axios.get(
+      "http://localhost:5000/vendorverification/Van Henry"
+    );
+    setVendors(response.data);
+  };
+
+  React.useEffect(() => {
+    getVendorData();
+  }, []);
+
+  console.log(vendors, "vendors");
 
   return (
     <Box sx={{ width: "95%", marginX: "auto" }} component="div">
@@ -625,58 +641,57 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={vendors.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.sort(getComparator(order, orderBy)).slice() */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(vendors, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+                  const isItemSelected = isSelected(row.rfpnumber);
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
+                      onClick={(event) => handleClick(event, row.rfpnumber)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
+                      key={row.rfpnumber}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
+                      <TableCell padding="checkbox"></TableCell>
                       <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         padding="none"
-                        onClick={() => setOpenPopup(true)}
+                        onClick={() => {
+                          setOpenPopup(true);
+                          // setVendorId(row.rfpnumber);
+                          setVendorUnique(row.subcategory);
+                        }}
                         className="cursor-pointer "
                         align="center"
                       >
-                        <div className="text-blue-600"> {row.id}</div>
+                        <div className="text-blue-600"> {row.rfpnumber}</div>
                       </TableCell>
-                      <TableCell align="center">{row.company}</TableCell>
+                      <TableCell align="center">Van Henry</TableCell>
                       <TableCell align="center">{row.category}</TableCell>
-                      <TableCell align="center">{row.subcat}</TableCell>
+                      <TableCell align="center">{row.subcategory}</TableCell>
                       <TableCell align="center">
-                        <div style={{ marginLeft: "12px" }}>{row.quantity}</div>
+                        <div style={{ marginLeft: "12px" }}>{row.Quantity}</div>
                       </TableCell>
-                      <TableCell align="center">{row.status}</TableCell>
-                      <TableCell align="center">{row.closerdate}</TableCell>
-                      <TableCell align="center">{row.bidprice}</TableCell>
+                      <TableCell align="center">{row.Stat}</TableCell>
+                      <TableCell align="center">{row.ClosureDate}</TableCell>
+                      <TableCell align="center">12</TableCell>
                       <TableCell align="center">
                         <select
-                          onChange={selectedOnChange}
+                          onChange={(e) => {
+                            setSelectedValue(e.target.value);
+                            setVendorUnique(row.subcategory);
+                          }}
                           className="bg-green-400 p-2 cursor-pointer"
                         >
                           <option
@@ -724,9 +739,10 @@ export default function EnhancedTable() {
           setPpopup={setPpopup}
           selectedValue={selectedValue}
           setSelectedValue={setSelectedValue}
+          vendorunique={vendorunique}
         />
       )}
-      {openpopup && <VendorPopup />}
+      {openpopup && <VendorPopup vendorunique={vendorunique} />}
     </Box>
   );
 }

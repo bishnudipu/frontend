@@ -21,8 +21,8 @@ import {
   Select,
   TextareaAutosize,
 } from "@material-ui/core";
-import { openPopup } from "../../jotaistore";
-import Success from '../../components/success'
+import { openPopup, vendorData } from "../../jotaistore";
+import Success from "../../components/success";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useDispatch } from "react-redux";
 //   import { setAddCreatRfpPopUp } from "../../redux/feature/popup.feature";
@@ -57,11 +57,12 @@ const names = [
   "Virginia Andrews",
   "Kelly Snyder",
 ];
-function VendorPopup() {
+function VendorPopup({ vendorunique }) {
   const [personName, setPersonName] = React.useState([]);
   const [value, setValue] = React.useState(new Date());
   const [popup, setPopup] = useAtom(openPopup);
-  const [open,setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const [vendors, setVendors] = useAtom(vendorData);
 
   let dispatch = useDispatch();
   const handleChange = (event) => {
@@ -84,6 +85,16 @@ function VendorPopup() {
   const handleDateChange = (newValue) => {
     setValue(newValue);
   };
+
+  console.log(vendorunique, "vendors");
+
+  const uniquueOne = vendors.filter(
+    (item) => item.subcategory === vendorunique
+  );
+
+  const singleState = uniquueOne[0];
+  console.log(singleState.uploadtheDocument.split(""), "uniquueOne");
+
   return (
     <>
       <div className="popUpmodal">
@@ -105,7 +116,7 @@ function VendorPopup() {
             <div className="modal-body">
               <form>
                 <Grid container spacing={2}>
-                  <Grid item md={4}>
+                  {/* <Grid item md={4}>
                     <FormControl sx={{ width: 220 }}>
                       <InputLabel
                         style={{
@@ -136,6 +147,28 @@ function VendorPopup() {
                         ))}
                       </Select>
                     </FormControl>
+                  </Grid> */}
+
+                  <Grid item md={4}>
+                    <FormControl>
+                      <InputLabel
+                        style={{
+                          marginBottom: "10px",
+                          // fontWeight:'bold'
+                          color: "black",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Company Name
+                      </InputLabel>
+                      <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        value="Van Henry"
+                        required
+                        disabled
+                      />
+                    </FormControl>
                   </Grid>
                   <Grid item md={4}>
                     <FormControl>
@@ -152,12 +185,16 @@ function VendorPopup() {
                       <TextField
                         id="outlined-basic"
                         variant="outlined"
+                        value={
+                          singleState.rfpnumber ? singleState.rfpnumber : ""
+                        }
+                        disabled
                         required
                       />
                     </FormControl>
                   </Grid>
                   <Grid item md={4}>
-                    <FormControl sx={{ width: 220 }}>
+                    {/* <FormControl sx={{ width: 220 }}>
                       <InputLabel
                         style={{
                           marginBottom: "10px",
@@ -185,10 +222,30 @@ function VendorPopup() {
                           </MenuItem>
                         ))}
                       </Select>
+                    </FormControl> */}
+
+                    <FormControl>
+                      <InputLabel
+                        style={{
+                          marginBottom: "10px",
+                          // fontWeight:'bold'
+                          color: "black",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Categories
+                      </InputLabel>
+                      <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        value={singleState.category ? singleState.category : ""}
+                        disabled
+                        required
+                      />
                     </FormControl>
                   </Grid>
                   <Grid item md={4}>
-                    <FormControl sx={{ width: 220 }}>
+                    {/* <FormControl sx={{ width: 220 }}>
                       <InputLabel
                         style={{
                           marginBottom: "10px",
@@ -216,10 +273,31 @@ function VendorPopup() {
                           </MenuItem>
                         ))}
                       </Select>
+                    </FormControl> */}
+                    <FormControl>
+                      <InputLabel
+                        style={{
+                          marginBottom: "10px",
+                          // fontWeight:'bold'
+                          color: "black",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Sub Categories
+                      </InputLabel>
+                      <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        value={
+                          singleState.subcategory ? singleState.subcategory : ""
+                        }
+                        disabled
+                        required
+                      />
                     </FormControl>
                   </Grid>
                   <Grid item md={4}>
-                    <FormControl>
+                    {/* <FormControl>
                       <InputLabel
                         style={{
                           marginBottom: "10px",
@@ -231,10 +309,29 @@ function VendorPopup() {
                         Quantity
                       </InputLabel>
                       <TextField id="outlined-basic" variant="outlined" />
+                    </FormControl> */}
+                    <FormControl>
+                      <InputLabel
+                        style={{
+                          marginBottom: "10px",
+                          // fontWeight:'bold'
+                          color: "black",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Quantity
+                      </InputLabel>
+                      <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        value={singleState.Quantity ? singleState.Quantity : ""}
+                        disabled
+                        required
+                      />
                     </FormControl>
                   </Grid>
                   <Grid item md={4}>
-                    <FormControl>
+                    {/* <FormControl>
                       <InputLabel
                         style={{
                           marginBottom: "10px",
@@ -246,19 +343,6 @@ function VendorPopup() {
                         Release Date
                       </InputLabel>
                       <Box style={{ display: "flex" }}>
-                        {/* <TextField
-                            style={{
-                              marginRight: "10px",
-                              width: "190px",
-                            }}
-                            id="outlined-basic"
-                            variant="outlined"
-                          />{" "}
-                          <CalendarMonthIcon
-                            style={{
-                              marginTop: "5px",
-                            }}
-                          /> */}
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DesktopDatePicker
                             inputFormat="MM/DD/YYYY"
@@ -275,9 +359,7 @@ function VendorPopup() {
                           />
                         </LocalizationProvider>
                       </Box>
-                    </FormControl>
-                  </Grid>
-                  <Grid item md={4}>
+                    </FormControl> */}
                     <FormControl>
                       <InputLabel
                         style={{
@@ -287,22 +369,32 @@ function VendorPopup() {
                           fontSize: "14px",
                         }}
                       >
+                        Release Date
+                      </InputLabel>
+                      <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        value={
+                          singleState.ReleaseDate ? singleState.ReleaseDate : ""
+                        }
+                        disabled
+                        required
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item md={4}>
+                    {/* <FormControl>
+                      <InputLabel
+                        style={{
+                          marginBottom: "10px",
+                          color: "black",
+                          fontSize: "14px",
+                        }}
+                      >
                         Closure Date
                       </InputLabel>
                       <Box style={{ display: "flex" }}>
-                        {/* <TextField
-                            style={{
-                              marginRight: "10px",
-                              width: "190px",
-                            }}
-                            id="outlined-basic"
-                            variant="outlined"
-                          />{" "}
-                          <CalendarMonthIcon
-                            style={{
-                              marginTop: "5px",
-                            }}
-                          /> */}
+                   
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DesktopDatePicker
@@ -321,10 +413,32 @@ function VendorPopup() {
                           />
                         </LocalizationProvider>
                       </Box>
+                    </FormControl> */}
+
+                    <FormControl>
+                      <InputLabel
+                        style={{
+                          marginBottom: "10px",
+                          // fontWeight:'bold'
+                          color: "black",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Closure Date
+                      </InputLabel>
+                      <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        value={
+                          singleState.ClosureDate ? singleState.ClosureDate : ""
+                        }
+                        disabled
+                        required
+                      />
                     </FormControl>
                   </Grid>
                   <Grid item md={4}>
-                    <FormControl>
+                    {/* <FormControl>
                       <InputLabel
                         style={{
                           marginBottom: "10px",
@@ -336,22 +450,10 @@ function VendorPopup() {
                         Bid Date
                       </InputLabel>
                       <Box style={{ display: "flex" }}>
-                        {/* <TextField
-                            style={{
-                              marginRight: "10px",
-                              width: "190px",
-                            }}
-                            id="outlined-basic"
-                            variant="outlined"
-                          />{" "}
-                          <CalendarMonthIcon
-                            style={{
-                              marginTop: "5px",
-                            }}
-                          /> */}
+                  
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DesktopDatePicker
-                            // label="Date desktop"
+                    
                             inputFormat="MM/DD/YYYY"
                             value={value}
                             onChange={handleDateChange}
@@ -367,6 +469,26 @@ function VendorPopup() {
                           />
                         </LocalizationProvider>
                       </Box>
+                    </FormControl> */}
+
+                    <FormControl>
+                      <InputLabel
+                        style={{
+                          marginBottom: "10px",
+                          // fontWeight:'bold'
+                          color: "black",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Bid Date
+                      </InputLabel>
+                      <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        value={singleState.BidDate ? singleState.BidDate : ""}
+                        disabled
+                        required
+                      />
                     </FormControl>
                   </Grid>
                   <Grid item md={4}>
@@ -410,7 +532,7 @@ function VendorPopup() {
                     </FormControl>
                   </Grid>
                   <Grid item md={4}>
-                    <FormControl>
+                    {/* <FormControl>
                       <InputLabel
                         style={{
                           marginBottom: "10px",
@@ -425,6 +547,29 @@ function VendorPopup() {
                         type="file"
                         id="outlined-basic"
                         variant="outlined"
+                      />
+                    </FormControl> */}
+                    <FormControl>
+                      <InputLabel
+                        style={{
+                          marginBottom: "10px",
+                          // fontWeight:'bold'
+                          color: "black",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Upload the Document
+                      </InputLabel>
+                      <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        value={
+                          singleState.uploadtheDocument
+                            ? singleState.uploadtheDocument
+                            : ""
+                        }
+                        disabled
+                        required
                       />
                     </FormControl>
                   </Grid>
@@ -443,9 +588,8 @@ function VendorPopup() {
                       <TextField variant="outlined" fullWidth multiline />
                     </FormControl>
                   </Grid>
-                  <Grid item md={12} lg=  {12} >
-                  
-                    <Accordion  >
+                  <Grid item md={12} lg={12}>
+                    <Accordion>
                       <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
@@ -454,11 +598,13 @@ function VendorPopup() {
                         <Typography>My Queries</Typography>
                       </AccordionSummary>
                       <AccordionDetails>
-                      <TextField id="outlined-basic" variant="outlined" sx={{ width: "100%" }}/>
+                        <TextField
+                          id="outlined-basic"
+                          variant="outlined"
+                          sx={{ width: "100%" }}
+                        />
                       </AccordionDetails>
                     </Accordion>
-                    
-                  
                   </Grid>
                   <Grid item md={12}>
                     <Box
@@ -481,7 +627,7 @@ function VendorPopup() {
                           color: "white",
                           //
                         }}
-                        onClick= {() => setOpen(true)}
+                        onClick={() => setOpen(true)}
                       >
                         Submit
                       </Button>
@@ -491,10 +637,8 @@ function VendorPopup() {
               </form>
             </div>
           </CardContent>
-          {open ? ( <Success   open={open} setOpen = {setOpen} />) : ''}
+          {open ? <Success open={open} setOpen={setOpen} /> : ""}
         </Card>
-        
-       
       </div>
     </>
   );

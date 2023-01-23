@@ -32,16 +32,23 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
 import { useAtom } from "jotai";
-import { createVendorSuccess, vendorlistPopup } from "../../../jotaistore";
+import {
+  createVendorSuccess,
+  rfpData,
+  totalvendor,
+  vendorlistPopup,
+} from "../../../jotaistore";
 import Vendordetails from "../../vendordetails";
 import VendorPopup from "../../createvendorpopup";
 import { createVendorPopup } from "../../../jotaistore";
 import Success from "../../success";
 import axios from "axios";
+import { useState } from "react";
+import { useEffect } from "react";
 
 // import { Stack } from "@mui/system";
 
-function createData(
+const CreateData = (
   Id,
   Category,
   SubCategory,
@@ -51,7 +58,7 @@ function createData(
   Closuredate,
   Description,
   Vendors
-) {
+) => {
   return {
     Id,
     Category,
@@ -63,10 +70,10 @@ function createData(
     Description,
     Vendors,
   };
-}
+};
 
 const rows = [
-  createData(
+  CreateData(
     "#654",
     "Electronics",
     "Monitors",
@@ -77,7 +84,7 @@ const rows = [
     "Need 98 Pcs of Dell Brand Monitors",
     6
   ),
-  createData(
+  CreateData(
     "#655",
     "Food & Health",
     "Package Drinking Water",
@@ -88,7 +95,7 @@ const rows = [
     "Need 12 Pcs of Package Drinking Water",
     10
   ),
-  createData(
+  CreateData(
     "#656",
     "Electronics",
     "Mouse and Keyboards",
@@ -99,7 +106,7 @@ const rows = [
     "Need 12 Pcs of Dell Brand Mouse and Keyboards",
     10
   ),
-  createData(
+  CreateData(
     "#658",
     "Furniture",
     "Working Desk",
@@ -110,7 +117,7 @@ const rows = [
     "Need 11 Pcs of Working Desk",
     7
   ),
-  createData(
+  CreateData(
     "#659",
     "Office Supply",
     "Office Stationery",
@@ -121,7 +128,7 @@ const rows = [
     "Need 9 Pcs of sticky note pad 10 pen stand, 2 Nos of papper",
     "6"
   ),
-  createData(
+  CreateData(
     "#660",
     "Office Supply",
     "Office Stationery",
@@ -132,7 +139,7 @@ const rows = [
     "Need 9 Pcs of sticky note pad 10 pen stand, 2 Nos of papper",
     "6"
   ),
-  createData(
+  CreateData(
     "#661",
     "Office Supply",
     "Office Stationery",
@@ -143,7 +150,7 @@ const rows = [
     "Need 9 Pcs of sticky note pad 10 pen stand, 2 Nos of papper",
     "6"
   ),
-  createData(
+  CreateData(
     "#661",
     "Office Supply",
     "Office Stationery",
@@ -154,7 +161,7 @@ const rows = [
     "Need 9 Pcs of sticky note pad 10 pen stand, 2 Nos of papper",
     "6"
   ),
-  createData(
+  CreateData(
     "#662",
     "Office Supply",
     "Office Stationery",
@@ -165,7 +172,7 @@ const rows = [
     "Need 9 Pcs of sticky note pad 10 pen stand, 2 Nos of papper",
     "6"
   ),
-  createData(
+  CreateData(
     "#663",
     "Office Supply",
     "Office Stationery",
@@ -176,7 +183,7 @@ const rows = [
     "Need 9 Pcs of sticky note pad 10 pen stand, 2 Nos of papper",
     "6"
   ),
-  createData(
+  CreateData(
     "#664",
     "Office Supply",
     "Office Stationery",
@@ -187,13 +194,6 @@ const rows = [
     "Need 9 Pcs of sticky note pad 10 pen stand, 2 Nos of papper",
     "6"
   ),
-  //   createData('#660','Ice cream sandwich', 237, 9.0, 37, 4.3),
-  //   createData('#661','Jelly Bean', 375, 0.0, 94, 0.0),
-  //   createData('#662','KitKat', 518, 26.0, 65, 7.0),
-  //   createData('#663','Lollipop', 392, 0.2, 98, 0.0),
-  //   createData('#664','Marshmallow', 318, 0, 81, 2.0),
-  //   createData('#665','Nougat', 360, 19.0, 9, 37.0),
-  //   createData('#667','Oreo', 437, 18.0, 63, 4.0),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -226,76 +226,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-// const headCells = [
-//   {
-//     id: "id",
-//     numeric: false,
-//     disablePadding: true,
-//     label: "#ID",
-//   },
-//   {
-//     id: "category",
-//     numeric: true,
-//     disablePadding: false,
-//     label: "Category",
-//   },
-//   {
-//     id: "subcategory",
-//     numeric: true,
-//     disablePadding: false,
-//     label: "Sub-Category",
-//   },
-//   {
-//     id: "Quantity",
-//     numeric: true,
-//     disablePadding: false,
-//     label: "Quantity",
-//   },
-//   {
-//     id: "status",
-//     numeric: true,
-//     disablePadding: false,
-//     label: "Status",
-//   },
-//   {
-//     id: "releasedate",
-//     numeric: true,
-//     disablePadding: false,
-//     label: "Release Date",
-//   },
-//   {
-//     id: "closerdate",
-//     numeric: true,
-//     disablePadding: false,
-//     label: "Closer Date",
-//   },
-//   {
-//     id: "description",
-//     numeric: true,
-//     disablePadding: false,
-//     label: "Description",
-//   },
-//   {
-//     id: "vendors",
-//     numeric: true,
-//     disablePadding: false,
-//     label: "Vendors",
-//   },
-// ];
-
 function EnhancedTableHead(props) {
-  // const {
-  //   onSelectAllClick,
-  //   order,
-  //   orderBy,
-  //   numSelected,
-  //   rowCount,
-  //   onRequestSort,
-  // } = props;
-  // const createSortHandler = (property) => (event) => {
-  //   onRequestSort(event, property);
-  // };
-
   return (
     <TableHead
       style={{
@@ -435,6 +366,8 @@ export default function EnhancedTable() {
   const [vendorId, setVendorId] = React.useState("");
   const [createVPopup, setCreateVPopup] = useAtom(createVendorPopup);
   const [successSetup, setSuccessSetup] = useAtom(createVendorSuccess);
+  const [vendorList, setVendorList] = useAtom(totalvendor);
+  const [rfpResponse, setRfpResponse] = useAtom(rfpData);
   // const [isAddRfp,setIsAddRfp] = React.useState(false)
   let dispatch = useDispatch();
   const isPopUp = useSelector((state) => {
@@ -443,6 +376,13 @@ export default function EnhancedTable() {
 
   let { createPopup } = isPopUp;
 
+  // const rows = [createData(rfpResponse.rfpnumber, rfpResponse.category)];
+  // rfpResponse.data.map((item) => {
+
+  //   return <div>item</div>;
+  // });
+
+  //
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -459,7 +399,6 @@ export default function EnhancedTable() {
     setSelected([]);
   };
 
-
   // const style = {
   //   position: "absolute",
   //   top: "50%",
@@ -472,6 +411,16 @@ export default function EnhancedTable() {
   //   p: 4,
   // };
 
+  const getRfp = async () => {
+    const response = await axios.get("http://localhost:5000/getrfps");
+    response.status !== 200 ? console.log("loading") : console.log("success");
+    setRfpResponse(response.data);
+  };
+
+  useEffect(() => {
+    getRfp();
+  }, []);
+
   const [data, setData] = React.useState([]);
   // const [getCategory, setGetCategory] = useState([]);
   // const [getSubCategory, setGetSubCategory] = useState([]);
@@ -480,18 +429,14 @@ export default function EnhancedTable() {
     const response = await fetch("http://localhost:5000/getCategory");
     const data = await response.json();
     setData(data);
-
   };
 
   React.useEffect(() => {
     categoryData();
   }, []);
 
-
-
   const getData = async () => {
     const response = await axios.get("http://localhost:5000/getVender");
- 
   };
 
   React.useEffect(() => {
@@ -501,11 +446,7 @@ export default function EnhancedTable() {
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
 
-  
-
     let newSelected = [];
-
-
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -545,9 +486,8 @@ export default function EnhancedTable() {
     onAfterPrint: () => alert("print success"),
   });
 
-
   return (
-    <Box sx={{ width: "95%", marginX: "auto" }} component="div">
+    <Box sx={{ width: "96%", marginX: "auto" }} component="div">
       <Box sx={{ display: "flex", width: "100%" }} component="div">
         <Typography
           style={{
@@ -610,7 +550,7 @@ export default function EnhancedTable() {
             style={{
               backgroundColor: "#d04a02",
               height: "30px",
-              marginRight: "10px",
+              // marginRight: "10px",
               // borderRadius:'20px',
               fontSize: "15px",
               color: "white",
@@ -639,26 +579,25 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={rfpResponse.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.sort(getComparator(order, orderBy)).slice() */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(rfpResponse, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+                  const isItemSelected = isSelected(row.rfpnumber);
                   const labelId = `enhanced-table-checkbox-${index}`;
-               
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
+                      onClick={(event) => handleClick(event, row.rfpnumber)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
+                      key={row.rfpnumber}
                       selected={isItemSelected}
                       sx={{ height: "70px" }}
                     >
@@ -670,31 +609,35 @@ export default function EnhancedTable() {
                         padding="none"
                         align="center"
                       >
-                        {row.Id}
+                        {row.rfpnumber}
                       </TableCell>
-                      <TableCell align="center">{row.Category}</TableCell>
-                      <TableCell align="center">{row.SubCategory}</TableCell>
+                      <TableCell align="center">{row.category}</TableCell>
+                      <TableCell align="center">{row.subcategory}</TableCell>
+
                       <TableCell align="center">
                         {" "}
                         <div> {row.Quantity} </div>{" "}
                       </TableCell>
                       <TableCell align="center">
                         {" "}
-                        <div className="mr-[15px]"> {row.Status} </div>
+                        <div className="mr-[15px]">open </div>
                       </TableCell>
-                      <TableCell align="center">{row.Releasedate}</TableCell>
-                      <TableCell align="center">{row.Closuredate}</TableCell>
-                      <TableCell align="center">{row.Description}</TableCell>
+                      <TableCell align="center">{row.ReleaseDate}</TableCell>
+                      <TableCell align="center">{row.ClosureDate}</TableCell>
+                      <TableCell align="center">{row.Details}</TableCell>
                       <TableCell
                         align="center"
                         sx={{ cursor: "pointer" }}
                         onClick={() => {
                           setVendorPopup(true);
-                          setVendorId(row.id);
+                          setVendorId(row.rfpnumber);
                         }}
                       >
                         {" "}
-                        <div className="text-blue-500 "> {row.Vendors}</div>
+                        <div className="text-blue-500 ">
+                          {" "}
+                          {row.vendor.length}
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
@@ -770,7 +713,7 @@ export default function EnhancedTable() {
                   <CloseIcon />
                 </div>
                 <div>
-                  RFP is successfully created and have sent to 6 vendors
+                  {` RFP is successfully created and have sent to ${vendorList.length} vendors`}
                 </div>
               </Alert>
             </div>

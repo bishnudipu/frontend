@@ -10,7 +10,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import React, { useEffect, useState } from "react";
 import "./createrfpopopup.css";
-import { createVendorPopup } from "../../jotaistore";
+import { createVendorPopup, totalvendor } from "../../jotaistore";
 import {
   Box,
   Button,
@@ -85,7 +85,7 @@ const subCategories = [
 ];
 
 function CreateRfpPopUp({ data, setData }) {
-  const [vendorList, setVendorList] = React.useState([]);
+  const [vendorList, setVendorList] = useAtom(totalvendor);
   const [releaseDate, setReleaseDate] = React.useState(new Date());
   // const [categoryitem, setCategoryitem] = React.useState("");
   // const [subCategory, setSubCategory] = React.useState([]);
@@ -103,6 +103,7 @@ function CreateRfpPopUp({ data, setData }) {
   const [getSubCategory, setGetSubCategory] = useState([]);
   const [categoryDefine, setCategoryDefine] = useState("");
   const [subcategoryDefine, setSubCategoryDefine] = useState("");
+  const [vendorData, setVendorData] = React.useState([]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -120,7 +121,7 @@ function CreateRfpPopUp({ data, setData }) {
     } = event;
     setVendorList(
       // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
+      typeof value === "string" ? value : value
     );
   };
 
@@ -182,6 +183,21 @@ function CreateRfpPopUp({ data, setData }) {
     setGetSubCategory(subcategories);
   };
 
+  const vendorDetails = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/getvendorames");
+
+      setVendorData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    vendorDetails();
+  }, []);
+
+  console.log(vendorData, "vendorData");
   const submitHandler = (e) => {
     e.preventDefault();
 
@@ -225,8 +241,7 @@ function CreateRfpPopUp({ data, setData }) {
       });
   };
 
-  console.log(categoryDefine, "categorydefine");
-  console.log(subcategoryDefine, "subcategorydefine");
+  console.log(vendorList, "vendorList");
 
   return (
     <>
@@ -270,17 +285,24 @@ function CreateRfpPopUp({ data, setData }) {
                           input={<OutlinedInput label="Tag" />}
                           renderValue={(selected) => selected.join(", ")}
                           name="vendorlist"
-                          // MenuProps={MenuProps}
+                          MenuProps={MenuProps}
                           required
                         >
-                          {names.map((name) => (
-                            <MenuItem key={name} value={name}>
-                              <Checkbox
-                                checked={vendorList.indexOf(name) > -1}
-                              />
-                              <ListItemText primary={name} />
-                            </MenuItem>
-                          ))}
+                          {vendorData.map((name, index) => {
+                            const { vendor } = name;
+                            console.log(
+                              vendorData.indexOf(vendor),
+                              "vendordata"
+                            );
+                            return (
+                              <MenuItem key={index} value={vendor}>
+                                {/* <Checkbox
+                                  checked={vendorData.indexOf(vendor) > -1}
+                                /> */}
+                                <ListItemText primary={vendor} />
+                              </MenuItem>
+                            );
+                          })}
                         </Select>
                       </FormControl>
                     </Grid>
@@ -574,6 +596,30 @@ function CreateRfpPopUp({ data, setData }) {
                         />
                       </FormControl>
                     </Grid>
+
+                    {/* <Grid item md={4}>
+                      <FormControl>
+                        <InputLabel
+                          style={{
+                            marginBottom: "10px",
+                            // fontWeight:'bold'
+                            color: "black",
+                            fontSize: "14px",
+                          }}
+                        >
+                          Status
+                        </InputLabel>
+                        <TextField
+                          type="number"
+                          id="outlined-basic"
+                          variant="outlined"
+                          value={rfpCost}
+                          name="rfpCost"
+                          required
+                          onChange={(e) => setRfpCost(e.target.value)}
+                        />
+                      </FormControl>
+                    </Grid> */}
                     <Grid item md={4}>
                       <FormControl>
                         <InputLabel

@@ -30,7 +30,7 @@ import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState, useRef } from "react";
 import { useAtom } from "jotai";
-import { vendorlistPopup } from "../../jotaistore";
+import { rfpData, vendorlistPopup } from "../../jotaistore";
 import Querylist from "../Querylist";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -154,6 +154,7 @@ const Vendordetails = ({ vendorId }) => {
   const [openSpace, setOpenSpace] = useState(false);
   const [queryList, setQueryList] = useState("");
   const [userId, setUserId] = useState("");
+  const [rfpResponse, setRfpResponse] = useAtom(rfpData);
 
   console.log(vendorList, "vendorList");
   console.log(category, "category");
@@ -199,21 +200,15 @@ const Vendordetails = ({ vendorId }) => {
     setValue(newValue);
   };
 
-  console.log(openSpace, "openspace");
-
-  console.log(queryList, "querylist");
-
   const [expandedRows, setExpandedRows] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleExpandRow = (userId) => {
     setUserId(userId);
     let currentExpandedRows = null;
-    console.log(userId, "userId");
 
     const isRowExpanded = currentExpandedRows === userId ? userId : null;
-    console.log(isRowExpanded, "isexpanded");
-    console.log(currentExpandedRows, "currentExpandedRows");
+
     const newExpandedRows = isRowExpanded
       ? null
       : (currentExpandedRows = userId);
@@ -226,8 +221,13 @@ const Vendordetails = ({ vendorId }) => {
     }
   };
 
-  console.log(userId, "userId");
-  console.log("", "bishnu");
+  console.log(
+    rfpResponse.filter((item) => item.rfpnumber === vendorId),
+    "rfpResponse"
+  );
+
+  console.log(vendorId, "vendorId");
+
   return (
     <>
       <div className="popUpmodal">

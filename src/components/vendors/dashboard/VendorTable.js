@@ -26,7 +26,11 @@ import CreateRfpPopUp from "../../createrfppopup/createrfppopup";
 import { useDispatch, useSelector } from "react-redux";
 import VendorPopup from "../../createvendorpopup";
 import { setAddCreatRfpPopUp } from "../../../redux/feature/popup.feature";
-import { openPopup, vendorData } from "../../../jotaistore";
+import {
+  createVendorSuccess,
+  openPopup,
+  vendorData,
+} from "../../../jotaistore";
 import { useAtom } from "jotai";
 import { productData } from "../../../jotaistore";
 import Notperticipate from "../../notprticipate/notperticipate";
@@ -431,6 +435,7 @@ export default function EnhancedTable() {
   const [ppopup, setPpopup] = React.useState(false);
   const [vendors, setVendors] = useAtom(vendorData);
   const [vendorunique, setVendorUnique] = React.useState("");
+  const [successSetup, setSuccessSetup] = useAtom(createVendorSuccess);
   // const [isAddRfp,setIsAddRfp] = React.useState(false)
   let dispatch = useDispatch();
   const isPopUp = useSelector((state) => {
@@ -531,7 +536,7 @@ export default function EnhancedTable() {
 
   React.useEffect(() => {
     getVendorData();
-  }, []);
+  }, [successSetup]);
 
   console.log(vendors, "vendors");
 
@@ -670,7 +675,7 @@ export default function EnhancedTable() {
                         onClick={() => {
                           setOpenPopup(true);
                           // setVendorId(row.rfpnumber);
-                          setVendorUnique(row.subcategory);
+                          setVendorUnique(row.rfpnumber);
                         }}
                         className="cursor-pointer "
                         align="center"

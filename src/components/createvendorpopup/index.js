@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./vendorpopup.css";
 import {
   Box,
@@ -35,6 +35,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { useAtom } from "jotai";
+import axios from "axios";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -63,6 +64,7 @@ function VendorPopup({ vendorunique }) {
   const [popup, setPopup] = useAtom(openPopup);
   const [open, setOpen] = useState(false);
   const [vendors, setVendors] = useAtom(vendorData);
+  const [bidPrice, setBidPrice] = useState("");
 
   let dispatch = useDispatch();
   const handleChange = (event) => {
@@ -88,13 +90,31 @@ function VendorPopup({ vendorunique }) {
 
   console.log(vendorunique, "vendors");
 
-  const uniquueOne = vendors.filter(
-    (item) => item.subcategory === vendorunique
-  );
+  const uniquueOne = vendors.filter((item) => item.rfpnumber === vendorunique);
 
   const singleState = uniquueOne[0];
-  console.log(singleState.uploadtheDocument.split(""), "uniquueOne");
+  console.log(singleState, "singleState");
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // PUT request using fetch inside useEffect React hook
+
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        BidRate: bidPrice,
+        participantstatus: true,
+      }),
+    };
+    axios
+      .put(
+        `http://localhost:5000/updatebid/April Tucker/${singleState.rfpnumber}`,
+        requestOptions
+      )
+      .catch((err) => console.log(err));
+  };
+  // empty dependency array means this effect will only run once (like componentDidMount in classes)
   return (
     <>
       <div className="popUpmodal">
@@ -114,7 +134,7 @@ function VendorPopup({ vendorunique }) {
           />
           <CardContent>
             <div className="modal-body">
-              <form>
+              <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
                   {/* <Grid item md={4}>
                     <FormControl sx={{ width: 220 }}>
@@ -528,7 +548,13 @@ function VendorPopup({ vendorunique }) {
                       >
                         My Bid Price
                       </InputLabel>
-                      <TextField id="outlined-basic" variant="outlined" />
+                      <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        onChange={(e) => {
+                          setBidPrice(e.target.value);
+                        }}
+                      />
                     </FormControl>
                   </Grid>
                   <Grid item md={4}>
@@ -616,6 +642,7 @@ function VendorPopup({ vendorunique }) {
                     >
                       <Button
                         size="large"
+                        type="submit"
                         aria-label="show 4 new mails"
                         //   color="inherit"
                         style={{
@@ -627,7 +654,7 @@ function VendorPopup({ vendorunique }) {
                           color: "white",
                           //
                         }}
-                        onClick={() => setOpen(true)}
+                        // onClick={() => setOpen(true)}
                       >
                         Submit
                       </Button>
@@ -637,7 +664,7 @@ function VendorPopup({ vendorunique }) {
               </form>
             </div>
           </CardContent>
-          {open ? <Success open={open} setOpen={setOpen} /> : ""}
+          {/* {open ? <Success open={open} setOpen={setOpen} /> : ""} */}
         </Card>
       </div>
     </>

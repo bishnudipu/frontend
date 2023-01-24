@@ -364,6 +364,7 @@ export default function EnhancedTable() {
   const [openVendorPopup, setVendorPopup] = useAtom(vendorlistPopup);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [vendorId, setVendorId] = React.useState("");
+  const [singleVendor, setSingleVendor] = React.useState("");
   const [createVPopup, setCreateVPopup] = useAtom(createVendorPopup);
   const [successSetup, setSuccessSetup] = useAtom(createVendorSuccess);
   const [vendorList, setVendorList] = useAtom(totalvendor);
@@ -419,7 +420,7 @@ export default function EnhancedTable() {
 
   useEffect(() => {
     getRfp();
-  }, []);
+  }, [successSetup]);
 
   const [data, setData] = React.useState([]);
   // const [getCategory, setGetCategory] = useState([]);
@@ -589,7 +590,7 @@ export default function EnhancedTable() {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.rfpnumber);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
+                  console.log(row, "row");
                   return (
                     <TableRow
                       hover
@@ -631,6 +632,7 @@ export default function EnhancedTable() {
                         onClick={() => {
                           setVendorPopup(true);
                           setVendorId(row.rfpnumber);
+                          setSingleVendor(row._id);
                         }}
                       >
                         {" "}
@@ -722,7 +724,9 @@ export default function EnhancedTable() {
         // <CreateRfpPopUp />
       )}
 
-      {openVendorPopup && <Vendordetails vendorId={vendorId} />}
+      {openVendorPopup && (
+        <Vendordetails vendorId={vendorId} singleVendor={singleVendor} />
+      )}
     </Box>
   );
 }

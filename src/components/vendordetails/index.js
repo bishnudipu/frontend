@@ -145,7 +145,7 @@ const data = [
   },
 ];
 
-const Vendordetails = ({ vendorId }) => {
+const Vendordetails = ({ vendorId, singleVendor }) => {
   const [vendorList, setVendorList] = useState([]);
   const [value, setValue] = React.useState(new Date());
   const [category, setCategory] = React.useState([]);
@@ -221,12 +221,17 @@ const Vendordetails = ({ vendorId }) => {
     }
   };
 
+  console.log(singleVendor, "singleVendor");
+
   console.log(
     rfpResponse.filter((item) => item.rfpnumber === vendorId),
     "rfpResponse"
   );
 
-  console.log(vendorId, "vendorId");
+  const singleRfpData = rfpResponse.filter((item) => item._id === singleVendor);
+  const singleData = singleRfpData[0];
+
+  console.log(singleRfpData, "vendorId");
 
   return (
     <>

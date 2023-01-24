@@ -203,6 +203,8 @@ function CreateRfpPopUp({ data, setData }) {
 
     const formData = new FormData();
 
+    
+
     formData.append("vendor", vendorList);
     formData.append("rfpnumber", rfpState);
     formData.append("category", categoryDefine);
@@ -242,6 +244,12 @@ function CreateRfpPopUp({ data, setData }) {
   };
 
   console.log(vendorList, "vendorList");
+
+  const myArray = vendorList.map((str, index) => ({
+    vendor: str,
+  }));
+
+  console.log(myArray, "myarray");
 
   return (
     <>
@@ -632,7 +640,7 @@ function CreateRfpPopUp({ data, setData }) {
                         >
                           Upload the Document
                         </InputLabel>
-                        <TextField
+                        <input
                           type="file"
                           id="outlined-basic"
                           variant="outlined"
@@ -640,7 +648,7 @@ function CreateRfpPopUp({ data, setData }) {
                           // value={file}
                           onChange={handleFileChange}
                           name="file"
-                          accept="csv/*"
+                          accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                           // value={file}
                         />
                       </FormControl>

@@ -414,7 +414,7 @@ export default function EnhancedTable() {
 
   const getRfp = async () => {
     const response = await axios.get("http://localhost:5000/getrfps");
-    response.status !== 200 ? console.log("loading") : console.log("success");
+
     setRfpResponse(response.data);
   };
 
@@ -590,7 +590,7 @@ export default function EnhancedTable() {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.rfpnumber);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  console.log(row, "row");
+
                   return (
                     <TableRow
                       hover

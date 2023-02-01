@@ -7,14 +7,43 @@ import {
 } from "@material-ui/core";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./rfpproducts.css";
 import Live from "../../Assets/live.jpg";
 import Open from "../../Assets/Open.png";
 import Close from "../../Assets/Close.png";
 import Pending from "../../Assets/Pending.png";
 import EnhancedTable from "./rfpproductstable/rpfproductstable";
+import axios from "axios";
 function RfpProducts() {
+  const [openCount, setOpenCount] = useState(0);
+  const [closedCount, setClosedCount] = useState(0);
+  const [pendingCount, setPendingCount] = useState(0);
+
+  const getOpenData = async () => {
+    const response = await axios.get("http://localhost:5000/getopencount");
+    console.log(response.data.closedcount[0].count, "open");
+    setOpenCount(response.data.closedcount[0].count);
+  };
+
+  const getClosedData = async () => {
+    const response = await axios.get("http://localhost:5000/getopencount");
+    console.log(response.data.closedcount[0].count, "open");
+    setClosedCount(response.data.closedcount[0].count);
+  };
+
+  const getPendingData = async () => {
+    const response = await axios.get("http://localhost:5000/getpendingcount");
+    console.log(response.data.closedcount[0].count, "open");
+    setPendingCount(response.data.closedcount[0].count);
+  };
+
+  useEffect(() => {
+    getOpenData();
+    getClosedData();
+    getPendingData();
+  }, []);
+
   return (
     <>
       <div className="rfpProducts">
@@ -62,7 +91,7 @@ function RfpProducts() {
                         fontSize: "18px",
                       }}
                     >
-                      3 Open
+                      {openCount} Open
                     </Typography>
                   </CardContent>
                 </Box>
@@ -97,7 +126,7 @@ function RfpProducts() {
                         fontSize: "18px",
                       }}
                     >
-                      6 Close
+                      {closedCount} Close
                     </Typography>
                   </CardContent>
                 </Box>
@@ -132,7 +161,7 @@ function RfpProducts() {
                         fontSize: "18px",
                       }}
                     >
-                      11 Pending
+                      {pendingCount} Pending
                     </Typography>
                   </CardContent>
                 </Box>

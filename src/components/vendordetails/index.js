@@ -156,10 +156,6 @@ const Vendordetails = ({ vendorId, singleVendor }) => {
   const [userId, setUserId] = useState("");
   const [rfpResponse, setRfpResponse] = useAtom(rfpData);
 
-  console.log(vendorList, "vendorList");
-  console.log(category, "category");
-  console.log(subCategory, "subCategory");
-
   let dispatch = useDispatch();
   const handleChange = (event) => {
     const {
@@ -171,7 +167,7 @@ const Vendordetails = ({ vendorId, singleVendor }) => {
     );
   };
 
-  console.log(data.map((item) => item, "bishnuitem"));
+  console.log(rfpResponse, "rfpResponse");
 
   const handleCategoryChange = (event) => {
     const {
@@ -203,6 +199,9 @@ const Vendordetails = ({ vendorId, singleVendor }) => {
   const [expandedRows, setExpandedRows] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  console.log(singleVendor, "singleVendor");
+  console.log(vendorId, "vendorId");
+
   const handleExpandRow = (userId) => {
     setUserId(userId);
     let currentExpandedRows = null;
@@ -221,17 +220,8 @@ const Vendordetails = ({ vendorId, singleVendor }) => {
     }
   };
 
-  console.log(singleVendor, "singleVendor");
-
-  console.log(
-    rfpResponse.filter((item) => item.rfpnumber === vendorId),
-    "rfpResponse"
-  );
-
   const singleRfpData = rfpResponse.filter((item) => item._id === singleVendor);
   const singleData = singleRfpData[0];
-
-  console.log(singleRfpData, "vendorId");
 
   return (
     <>
@@ -299,7 +289,6 @@ const Vendordetails = ({ vendorId, singleVendor }) => {
                         </thead>
 
                         {data.map((item, index) => {
-                          console.log(index, "indexnumber");
                           const {
                             vendorName,
                             responseStatus,
@@ -309,7 +298,7 @@ const Vendordetails = ({ vendorId, singleVendor }) => {
                             bidRate,
                             senderMessage,
                           } = item;
-                          console.log(vendorName, "vendorName");
+
                           return (
                             <tbody>
                               <tr
@@ -354,10 +343,6 @@ const Vendordetails = ({ vendorId, singleVendor }) => {
                                     {query > 0 && (
                                       <>
                                         {senderMessage.map((item, index) => {
-                                          console.log(
-                                            Object.values(item).join(),
-                                            "objectvalues"
-                                          );
                                           const marginTopKeep =
                                             Object.values(item).join();
                                           return (

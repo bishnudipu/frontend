@@ -7,10 +7,11 @@ const name = "Login with Auth0";
 const iconUrl = "https://avatars.githubusercontent.com/u/2824157?s=280&v=4";
 
 export const rainbowWeb3AuthConnector = ({ chains }) => {
+  
   // Create Web3Auth Instance
   const web3AuthInstance = new Web3AuthCore({
     clientId:
-      "BE-2PFnrc3ljP5MfNBuIDlwcxNAq5ceFX7UEF7Q_V7LWB4TeUHokYglrrkfVjJpPYRk5EfOsCinTUXC6StBd0Ro",
+      "BE-2PFnrc3ljP5MfNBuIDlwcxNAq5ceFX7UEF7Q_V7LWB4TeUHokYglrrkfVjJpPYRk5EfOsCinTUXC6StBd0Ro", //obtained from web3 aurh developed dashboard
     chainConfig: {
       chainNamespace: CHAIN_NAMESPACES.EIP155,
       chainId: "0x" + chains[0].id.toString(16),
